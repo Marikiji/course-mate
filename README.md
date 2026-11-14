@@ -4,8 +4,12 @@
 
 这是我大三上的第一个完整项目，目标不是做大，而是走完 **需求 → 开发 → 测试 → 部署 → 演示** 的全流程。
 
-> 在线 Demo：部署后把链接放在这里  
-> 演示视频：录好后把链接放在这里
+**在线 Demo**：https://course-mate-dyit.onrender.com  
+**源码**：https://github.com/Marikiji/course-mate
+
+![CourseMate 课程表页面](docs/demo.png)
+
+> Render 免费实例闲置后会休眠，第一次打开可能需要等 30–60 秒。
 
 ## 功能
 
@@ -65,21 +69,12 @@ pytest -q
 
 ## 部署到 Render
 
-1. 把代码推到 GitHub：
+项目自带 `render.yaml`，用 Render 的 Blueprint 一键部署：
 
-```powershell
-git init
-git add .
-git commit -m "CourseMate v1"
-git branch -M main
-git remote add origin https://github.com/<你的用户名>/course-mate.git
-git push -u origin main
-```
-
-2. 打开 [Render](https://render.com) → New → Web Service → 连接这个仓库。
-3. Build Command：`pip install -r requirements.txt`
-4. Start Command：`gunicorn app:app`
-5. 部署完成后拿到 `https://course-mate-xxxx.onrender.com`，填到上面的 Demo 链接。
+1. 代码推到 GitHub 后，打开 [Render](https://render.com) → **New +** → **Blueprint**
+2. 选择仓库 `Marikiji/course-mate`，分支 `main`
+3. Render 自动读取 `render.yaml`，点 **Deploy Blueprint**
+4. 部署完成后得到 `https://course-mate-dyit.onrender.com`
 
 > 注意：Render 免费实例的磁盘是临时的，重新部署后 SQLite 数据会清空。这个项目是演示用途，够用；如果要长期保存，可以换 Render Disk 或 Postgres。
 
