@@ -1,0 +1,16 @@
+body {
+  min-height: 100vh;
+}
+
+.card {
+  border: 0;
+}
+
+.table > :not(caption) > * > * {
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
+}
+
+.display-6 {
+  font-weight: 600;
+}

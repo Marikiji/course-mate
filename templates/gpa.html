@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="h3 mb-3">GPA 与均分</h1>
+
+<div class="row g-3 mb-3">
+  <div class="col-md-4">
+    <div class="card card-body shadow-sm">
+      <div class="text-muted small">加权均分</div>
+      <div class="display-6">
+        {{ '%.2f'|format(average) if average is not none else '—' }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card card-body shadow-sm">
+      <div class="text-muted small">GPA（4.0 制）</div>
+      <div class="display-6">
+        {{ '%.2f'|format(gpa_value) if gpa_value is not none else '—' }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card card-body shadow-sm">
+      <div class="text-muted small">已算学分</div>
+      <div class="display-6">{{ '%.1f'|format(total_credits) }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="card card-body shadow-sm mb-3">
+  <h2 class="h5">What-if：剩余学分要考多少</h2>
+  <p class="text-muted small mb-2">
+    比如你现在均分 79，还剩 30 学分，想拉到 80，需要剩下的课平均考多少。
+  </p>
+  <form class="row g-2" method="get">
+    <div class="col-md-4">
+      <label class="form-label" for="target">目标均分</label>
+      <input class="form-control" id="target" name="target"
+             value="{{ target }}" placeholder="80">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label" for="remaining">剩余学分</label>
+      <input class="form-control" id="remaining" name="remaining"
+             value="{{ remaining }}" placeholder="30">
+    </div>
+    <div class="col-md-4 d-flex align-items-end">
+      <button class="btn btn-primary">计算</button>
+    </div>
+  </form>
+
+  {% if required is not none %}
+    <div class="alert alert-info mt-3 mb-0">
+      剩余 {{ remaining }} 学分，平均需要
+      <strong>{{ '%.2f'|format(required) }}</strong> 分，才能到 {{ target }}。
+      {% if required > 100 %}
+        （超过 100，说明只靠剩余学分拉不到这个目标。）
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+
+{% if scored %}
+  <div class="table-responsive card shadow-sm">
+    <table class="table mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>课程</th>
+          <th>学分</th>
+          <th>成绩</th>
+          <th>百分制</th>
+          <th>绩点</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in scored %}
+          <tr>
+            <td>{{ row.course['name'] }}</td>
+            <td>{{ row.course['credits'] }}</td>
+            <td>{{ row.course['score'] }}</td>
+            <td>{{ '%.1f'|format(row.percent) }}</td>
+            <td>{{ '%.2f'|format(row.gpa) }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="alert alert-info">
+    还没有带成绩的课程。添加课程时填上成绩，这里会自动算。
+  </div>
+{% endif %}
+
+<p class="text-muted small mt-3">
+  GPA 按北交大 4.0 制换算：90–100=4.0，85–89=3.7，81–84=3.3，
+  78–80=3.0，75–77=2.7，71–74=2.3，68–70=2.0，65–67=1.7，
+  61–64=1.3，60=1.0。Lancaster 学位等级另算。
+</p>
+{% endblock %}
